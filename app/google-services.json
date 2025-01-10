@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "755243761727",
+    "project_id": "petly-7a34d",
+    "storage_bucket": "petly-7a34d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755243761727:android:f9a04c3ac3b3a4252a388a",
+        "android_client_info": {
+          "package_name": "com.example.petly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd7WZRGZf93l8bZub9Wd6T35cT_pw40ZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
