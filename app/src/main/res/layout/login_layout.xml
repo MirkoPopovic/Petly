@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentRight="true"
+        android:rotation="-30"
+        android:src="@drawable/track"
+        android:layout_marginTop="-10dp"
+        android:layout_marginRight="-15dp" />
+
+    <TextView
+        android:id="@+id/petlyH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="petly."
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/migra_extrabold"
+        android:textSize="60dp"
+        android:textColor="@color/black"/>
+
+
+    <RelativeLayout
+        android:id="@+id/loginSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_section"
+        android:paddingTop="20dp"
+        android:paddingHorizontal="30dp"
+        android:paddingBottom="90dp"
+        android:layout_below="@+id/petlyH">
+
+        <ImageView
+            android:id="@+id/dogImmage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/puppy"
+            android:layout_centerHorizontal="true"/>
+
+        <RelativeLayout
+            android:id="@+id/linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dogImmage">
+
+            <TextView
+                android:id="@+id/loginH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/white"
+                android:textSize="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/whit_srack"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/labelEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:layout_below="@+id/linear"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            />
+
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/deit_text_backgound"
+            android:layout_below="@+id/labelEmail"
+            android:paddingLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:inputType="textEmailAddress"
+            />
+
+        <TextView
+            android:id="@+id/labelPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:layout_below="@+id/editEmail"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            />
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/deit_text_backgound"
+            android:layout_below="@+id/labelPassword"
+            android:paddingLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:inputType="textPassword"/>
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/btnSection"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/loginSection"
+        android:background="@drawable/login_btn_container"
+        android:layout_marginTop="-30dp">
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/singup_button_backgound"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSection"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account?"
+            android:textColor="@color/mainBlue"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="15dp"/>
+
+        <TextView
+            android:id="@+id/singUpLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sing Up"
+            android:textColor="@color/mainBlue"
+            android:fontFamily="@font/poppins_bold"
+            android:layout_marginLeft="5dp"
+            android:textSize="15dp"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

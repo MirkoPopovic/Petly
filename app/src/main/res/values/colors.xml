@@ -4,5 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="mainBlue">#3b8ce0</color>
     <color name="editTextBlue">#b1d7ff</color>
-
+    <color name="roelBtn1">#10377a</color>
+    <color name="roleBtn2">#b1d7ff</color>
+    <color name="containerBlue">#88b6e7</color>
 </resources>

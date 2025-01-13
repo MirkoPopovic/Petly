@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="25dp"
+        android:background="@color/white"
+        android:textColor="@color/black"/>
+
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="400sp"
+        android:layout_below="@+id/header"
+        android:src="@drawable/logo"
+        android:layout_centerHorizontal="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/login_section_background">
+
+        <TextView
+            android:id="@+id/header2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="What is your role?"
+            android:textColor="@color/white"
+            android:textSize="50dp" />
+
+        <Button
+            android:id="@+id/btnSitter"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/header2"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/role_button1"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Im a Pet Sitter"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/btnOwner"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/btnSitter"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_role2"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Im a Pet Sitter"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
