@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.window.SplashScreen
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
+    private lateinit var btnProfile: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -34,6 +37,13 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.txtname).setOnClickListener{
             auth.signOut()
             userNotLogedIn()
+        }
+
+        btnProfile = findViewById(R.id.btnProfile)
+
+        btnProfile.setOnClickListener{
+            val intent = Intent(this@MainActivity, UserProfileActivity::class.java)
+            startActivity(intent)
         }
 
         auth = FirebaseAuth.getInstance()
