@@ -20,6 +20,11 @@ class UserProfileActivity : AppCompatActivity() {
     //Firebase
     private lateinit var auth: FirebaseAuth
 
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
+    private lateinit var adapter: PetAdapter
+    private val petList = mutableListOf<Pet>()
+    private lateinit var dbRef: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
@@ -28,6 +33,14 @@ class UserProfileActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         btnOpenAddDialog = findViewById(R.id.addPetBtn)
+
+        recyclerView = findViewById(R.id.pets)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        adapter = PetAdapter(petList)
+        recyclerView.adapter = adapter
+
+        dbRef = Firebase.database.reference.child("pets")
+        loadUserPets()
 
         btnOpenAddDialog.setOnClickListener {
             val dialog = BottomSheetDialog(this)
@@ -76,10 +89,31 @@ class UserProfileActivity : AppCompatActivity() {
         newPetRef.setValue(pet).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this, "Pet added successfully!", Toast.LENGTH_SHORT).show()
+                loadUserPets()
             } else {
                 Toast.makeText(this, "Failed to add pet!", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun loadUserPets() {
+        val userId = auth.currentUser?.uid ?: return
+
+        dbRef.orderByChild("ownerId").equalTo(userId)
+            .addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
+                override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                    petList.clear()
+                    for (petSnapshot in snapshot.children) {
+                        val pet = petSnapshot.getValue(Pet::class.java)
+                        pet?.let { petList.add(it) }
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                    Toast.makeText(this@UserProfileActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
 }
