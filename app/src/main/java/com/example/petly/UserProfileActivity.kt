@@ -1,6 +1,10 @@
 package com.example.petly
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.RelativeLayout
@@ -11,11 +15,19 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
+import android.widget.TextView
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.installations.installations
 
-class UserProfileActivity : AppCompatActivity() {
+
+class UserProfileActivity: AppCompatActivity() {
 
     private lateinit var btnOpenAddDialog: RelativeLayout
     private lateinit var btnAddPat: RelativeLayout
+    private lateinit var btnOpenSettingsDialog: RelativeLayout
+    private lateinit var btnDeleteAccount: RelativeLayout
 
     //Firebase
     private lateinit var auth: FirebaseAuth
@@ -23,7 +35,12 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var adapter: PetAdapter
     private val petList = mutableListOf<Pet>()
-    private lateinit var dbRef: DatabaseReference
+    private lateinit var petsRef: DatabaseReference
+
+    private lateinit var txtName: TextView
+    private lateinit var txtDescription: TextView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,31 +49,132 @@ class UserProfileActivity : AppCompatActivity() {
         //Firebase and database
         auth = FirebaseAuth.getInstance()
 
+
+        getStuffFromXml()
+
+        petsRef = Firebase.database.reference.child("pets")
+        loadUserPets()
+
+
+        txtName = findViewById(R.id.txtName)
+        txtDescription = findViewById(R.id.aboutMeH)
+
+        btnOpenAddDialog.setOnClickListener {
+            openAddPetDialog()
+        }
+
+        btnOpenSettingsDialog.setOnClickListener{
+            btnOpenSettingsDialog()
+        }
+
+        loadUserData()
+    }
+
+    private fun getStuffFromXml(){
         btnOpenAddDialog = findViewById(R.id.addPetBtn)
+        btnOpenSettingsDialog = findViewById(R.id.settingsBtn)
 
         recyclerView = findViewById(R.id.pets)
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         adapter = PetAdapter(petList)
         recyclerView.adapter = adapter
 
-        dbRef = Firebase.database.reference.child("pets")
-        loadUserPets()
-
-        btnOpenAddDialog.setOnClickListener {
-            val dialog = BottomSheetDialog(this)
-            val dialogAddView = layoutInflater.inflate(R.layout.bottom_sheat_add_pets, null)
-
-            btnAddPat = dialogAddView.findViewById(R.id.btnAddDialog)
-
-            btnAddPat.setOnClickListener{
-                addPet(dialogAddView)
-                dialog.cancel()
-            }
-
-            dialog.setContentView(dialogAddView)
-            dialog.show()
-        }
+        txtName = findViewById(R.id.txtName)
+        txtDescription = findViewById(R.id.aboutMeH)
     }
+
+    private fun openAddPetDialog(){
+        val dialog = BottomSheetDialog(this)
+        val dialogAddView = layoutInflater.inflate(R.layout.bottom_sheat_add_pets, null)
+
+        btnAddPat = dialogAddView.findViewById(R.id.btnAddDialog)
+
+        btnAddPat.setOnClickListener{
+            addPet(dialogAddView)
+            dialog.cancel()
+        }
+
+        dialog.setContentView(dialogAddView)
+        dialog.show()
+    }
+
+    private fun btnOpenSettingsDialog(){
+        val dialog = BottomSheetDialog(this)
+        val dialogAddView = layoutInflater.inflate(R.layout.botton_sheat_delete_account, null)
+
+        btnDeleteAccount = dialogAddView.findViewById(R.id.btnDeleteAccount)
+
+        btnDeleteAccount.setOnClickListener{
+            showDeleteAccountDialog()
+            dialog.cancel()
+        }
+
+        dialog.setContentView(dialogAddView)
+        dialog.show()
+    }
+
+    private fun showDeleteAccountDialog() {
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        input.hint = "Enter your password"
+
+        AlertDialog.Builder(this)
+            .setTitle("Delete Account")
+            .setMessage("This action is permanent. Please confirm your password.")
+            .setView(input)
+            .setPositiveButton("Delete") { _, _ ->
+                val password = input.text.toString()
+                if (password.isNotEmpty()) {
+                    reauthenticateAndDelete(password)
+                } else {
+                    Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun reauthenticateAndDelete(password: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+        val email = user?.email
+
+        if (user != null && email != null) {
+            val credential = EmailAuthProvider.getCredential(email, password)
+
+            user.reauthenticate(credential)
+                .addOnSuccessListener {
+                    deleteAccount()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Re-authentication failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+        }
+
+    }
+
+    private fun deleteAccount() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val uid = user?.uid ?: return
+
+        val userRef = FirebaseDatabase.getInstance().getReference("users").child(uid)
+        userRef.removeValue()
+
+        user.delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Account successfully deleted", Toast.LENGTH_SHORT).show()
+                FirebaseAuth.getInstance().signOut()
+
+                // Redirect to login screen
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error deleting account: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
 
     private fun addPet(view: View) {
         val txtName = view.findViewById<EditText>(R.id.txtName)
@@ -99,7 +217,7 @@ class UserProfileActivity : AppCompatActivity() {
     private fun loadUserPets() {
         val userId = auth.currentUser?.uid ?: return
 
-        dbRef.orderByChild("ownerId").equalTo(userId)
+        petsRef.orderByChild("ownerId").equalTo(userId)
             .addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
                 override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
                     petList.clear()
@@ -114,6 +232,33 @@ class UserProfileActivity : AppCompatActivity() {
                     Toast.makeText(this@UserProfileActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    private fun loadUserData() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val userRef = FirebaseDatabase.getInstance().getReference("User").child(uid)
+
+        Log.d("UID_DEBUG", "UID: $uid")
+        userRef.get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val user = snapshot.getValue(User::class.java)
+                    if (user != null) {
+                        txtName.text = user.name ?: "Nepoznat"
+                        Log.d("USER", "Učitano ime: ${user.name}")
+                    } else {
+                        txtName.text = "Korisnik ne postoji (User null)"
+                        Log.e("USER", "User objekat je null")
+                    }
+                } else {
+                    txtName.text = "Nema korisnika"
+                    Log.e("USER", "Snapshot ne postoji")
+                }
+            }
+            .addOnFailureListener {
+                txtName.text = "Greška pri učitavanju"
+                Log.e("USER", "Greška: ${it.message}")
+            }
     }
 
 }

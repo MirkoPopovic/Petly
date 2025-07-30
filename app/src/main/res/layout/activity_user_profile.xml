@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".UserProfileActivity"
     android:background="@color/lightGray">
 
@@ -94,7 +95,7 @@
                 android:id="@+id/txtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mirko Popovic"
+                android:text=""
                 android:fontFamily="@font/poppins_bold"
                 android:textColor="@color/roelBtn1"
                 android:textSize="28dp"/>
@@ -129,7 +130,7 @@
                 android:layout_height="150dp"
                 android:background="@drawable/text_background"
                 android:layout_below="@+id/aboutMeH"
-                android:text="lkfvlkjdlkvjdflvkjdlvkjdvlkdjvldkjvdlkvj"
+                android:text=""
                 android:textSize="18dp"
                 android:padding="15dp"/>
 
@@ -173,8 +174,29 @@
                     android:background="@drawable/singup_button_backgound"
                     android:text="Add Pet"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:id="@+id/btnAddPets"/>
 
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settingsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/deit_text_backgound"
+                android:layout_below="@+id/addPetBtn"
+                android:layout_marginTop="10dp"
+                android:paddingVertical="5dp">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/singup_button_backgound"
+                    android:text="Settings"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

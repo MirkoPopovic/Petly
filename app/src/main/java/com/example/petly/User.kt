@@ -1,3 +1,10 @@
 package com.example.petly
 
-data class User(var name: String?, var email: String?, var role: String, var uid: String)
+data class User(
+    var name: String? = null,
+    var email: String? = null,
+    var role: String = "",
+    var uid: String = "",
+    var description: String = "",
+    var city: String = ""
+)

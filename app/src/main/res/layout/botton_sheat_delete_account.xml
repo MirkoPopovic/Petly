@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="20dp"
+    android:background="@drawable/bottom_sheat_dialog_background">
+
+
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textColor="@color/containerBlue"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/addSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header">
+
+        <RelativeLayout
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/add_pet_btn_section"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="5dp">
+
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/singup_button_backgound"
+                android:text="Delete Account"
+                android:textAllCaps="false"
+                android:textColor="@color/white"/>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</RelativeLayout>
