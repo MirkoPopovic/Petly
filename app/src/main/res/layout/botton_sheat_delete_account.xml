@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="20dp"
     android:paddingTop="20dp"
-    android:background="@drawable/bottom_sheat_dialog_background">
+    android:background="@drawable/bottom_sheat_dialog_background"
+    android:paddingBottom="20dp">
 
 
 

@@ -28,6 +28,7 @@ class UserProfileActivity: AppCompatActivity() {
     private lateinit var btnAddPat: RelativeLayout
     private lateinit var btnOpenSettingsDialog: RelativeLayout
     private lateinit var btnDeleteAccount: RelativeLayout
+    private lateinit var backBtn: RelativeLayout
 
     //Firebase
     private lateinit var auth: FirebaseAuth
@@ -67,6 +68,10 @@ class UserProfileActivity: AppCompatActivity() {
             btnOpenSettingsDialog()
         }
 
+        backBtn.setOnClickListener{
+            back()
+        }
+
         loadUserData()
     }
 
@@ -81,6 +86,15 @@ class UserProfileActivity: AppCompatActivity() {
 
         txtName = findViewById(R.id.txtName)
         txtDescription = findViewById(R.id.aboutMeH)
+
+        backBtn = findViewById(R.id.mainHeader)
+    }
+
+    private fun back(){
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
     }
 
     private fun openAddPetDialog(){
@@ -157,23 +171,41 @@ class UserProfileActivity: AppCompatActivity() {
         val uid = user?.uid ?: return
 
         val userRef = FirebaseDatabase.getInstance().getReference("users").child(uid)
-        userRef.removeValue()
+        val petsRef = FirebaseDatabase.getInstance().getReference("pets")
 
-        user.delete()
-            .addOnSuccessListener {
-                Toast.makeText(this, "Account successfully deleted", Toast.LENGTH_SHORT).show()
-                FirebaseAuth.getInstance().signOut()
+        // 1. Prvo brišemo sve ljubimce tog korisnika
+        petsRef.orderByChild("ownerId").equalTo(uid)
+            .addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (petSnapshot in snapshot.children) {
+                        petSnapshot.ref.removeValue()
+                    }
 
-                // Redirect to login screen
-                val intent = Intent(this, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Error deleting account: ${e.message}", Toast.LENGTH_LONG).show()
-            }
+                    // 2. Brišemo korisnika iz "users" čvora
+                    userRef.removeValue()
+
+                    // 3. Brišemo korisnički nalog iz Authentication
+                    user?.delete()
+                        ?.addOnSuccessListener {
+                            Toast.makeText(this@UserProfileActivity, "Account and pets deleted", Toast.LENGTH_SHORT).show()
+                            FirebaseAuth.getInstance().signOut()
+
+                            val intent = Intent(this@UserProfileActivity, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            finish()
+                        }
+                        ?.addOnFailureListener { e ->
+                            Toast.makeText(this@UserProfileActivity, "Error deleting account: ${e.message}", Toast.LENGTH_LONG).show()
+                        }
+                }
+
+                override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                    Toast.makeText(this@UserProfileActivity, "Failed to delete pets: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
+
 
 
     private fun addPet(view: View) {

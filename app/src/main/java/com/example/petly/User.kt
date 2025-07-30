@@ -5,6 +5,7 @@ data class User(
     var email: String? = null,
     var role: String = "",
     var uid: String = "",
-    var description: String = "",
-    var city: String = ""
+    var age: String = "",
+    var city: String = "",
+    var sex: String = ""
 )
