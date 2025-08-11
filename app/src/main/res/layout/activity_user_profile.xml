@@ -101,6 +101,7 @@
                 android:textSize="28dp"/>
 
             <ImageView
+                android:id="@+id/btnEdit"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/edit_icon"
@@ -126,6 +127,7 @@
                 android:layout_marginTop="15dp" />
 
             <TextView
+                android:id="@+id/txtAboutMe"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:background="@drawable/text_background"

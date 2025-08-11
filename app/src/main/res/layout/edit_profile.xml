@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="20dp"
+    android:background="@drawable/bottom_sheat_dialog_background">
+
+
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Profile"
+        android:textColor="@color/containerBlue"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/addSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:id="@+id/labelName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18dp"
+            android:textColor="@color/mainBlue"/>
+
+        <EditText
+            android:id="@+id/txtUserName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/deit_text_backgound"
+            android:layout_below="@+id/labelName"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"
+            android:hint="name"/>
+
+
+        <TextView
+            android:id="@+id/labelAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Age"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18dp"
+            android:textColor="@color/mainBlue"
+            android:layout_below="@+id/txtUserName"/>
+
+        <EditText
+            android:id="@+id/txtUserAge"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/deit_text_backgound"
+            android:layout_below="@+id/labelAge"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"
+            android:hint="Age"/>
+
+        <TextView
+            android:id="@+id/labelCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18dp"
+            android:textColor="@color/mainBlue"
+            android:layout_below="@+id/txtUserAge"/>
+
+        <EditText
+            android:id="@+id/txtUserCity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/deit_text_backgound"
+            android:layout_below="@+id/labelCity"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"
+            android:hint="Weight"/>
+
+
+        <RelativeLayout
+            android:id="@+id/btnSaveUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/add_pet_btn_section"
+            android:layout_below="@+id/txtUserCity"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="5dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/singup_button_backgound"
+                android:text="Save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</RelativeLayout>

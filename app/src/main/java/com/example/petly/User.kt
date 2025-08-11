@@ -7,5 +7,4 @@ data class User(
     var uid: String = "",
     var age: String = "",
     var city: String = "",
-    var sex: String = ""
 )

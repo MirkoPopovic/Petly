@@ -7,6 +7,7 @@ import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,10 +17,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 import android.widget.TextView
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.installations.installations
+import kotlinx.coroutines.tasks.await
 
 
 class UserProfileActivity: AppCompatActivity() {
@@ -29,6 +32,15 @@ class UserProfileActivity: AppCompatActivity() {
     private lateinit var btnOpenSettingsDialog: RelativeLayout
     private lateinit var btnDeleteAccount: RelativeLayout
     private lateinit var backBtn: RelativeLayout
+    private lateinit var btnSignOut: RelativeLayout
+    private lateinit var btnEdit: ImageView
+    private lateinit var txtAboutMe: TextView
+
+    //Edit profile dilaog
+    private lateinit var btnSave: RelativeLayout
+    private lateinit var txtUserName: TextView
+    private lateinit var txtUsrAge: TextView
+    private lateinit var txtUserCity: TextView
 
     //Firebase
     private lateinit var auth: FirebaseAuth
@@ -49,6 +61,7 @@ class UserProfileActivity: AppCompatActivity() {
 
         //Firebase and database
         auth = FirebaseAuth.getInstance()
+
 
 
         getStuffFromXml()
@@ -72,6 +85,14 @@ class UserProfileActivity: AppCompatActivity() {
             back()
         }
 
+        btnSignOut.setOnClickListener{
+            logOut()
+        }
+
+        btnEdit.setOnClickListener(){
+            openEditDialog()
+        }
+
         loadUserData()
     }
 
@@ -88,6 +109,10 @@ class UserProfileActivity: AppCompatActivity() {
         txtDescription = findViewById(R.id.aboutMeH)
 
         backBtn = findViewById(R.id.mainHeader)
+
+        btnSignOut = findViewById(R.id.logOutBtn)
+        btnEdit = findViewById(R.id.btnEdit)
+        txtAboutMe = findViewById(R.id.txtAboutMe)
     }
 
     private fun back(){
@@ -95,6 +120,63 @@ class UserProfileActivity: AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
         finish()
+    }
+
+    private fun logOut(){
+        auth.signOut()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun openEditDialog(){
+        val dialog = BottomSheetDialog(this)
+        var dialogAddView = layoutInflater.inflate(R.layout.edit_profile, null)
+
+        btnSave = dialogAddView.findViewById(R.id.btnSaveUser)
+        txtUserCity = dialogAddView.findViewById(R.id.txtUserCity)
+        txtUserName = dialogAddView.findViewById(R.id.txtUserName)
+        txtUsrAge = dialogAddView.findViewById(R.id.txtUserAge)
+
+        getCurrentUser { user ->
+            if(user != null) {
+                txtUserName.text = user.name
+                txtUserCity.text = user.city
+                txtUsrAge.text = user.age
+            }
+        }
+
+        btnSave.setOnClickListener{
+            updateUser(dialog)
+        }
+
+        dialog.setContentView(dialogAddView)
+        dialog.show()
+    }
+
+    private fun updateUser(dialog: BottomSheetDialog){
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val userRef = FirebaseDatabase.getInstance().getReference("User").child(uid)
+
+        val updatedName = txtUserName.text.toString().trim()
+        val updatedCity = txtUserCity.text.toString().trim()
+        val updatedAge = txtUsrAge.text.toString().trim()
+
+        val updates = mapOf(
+            "name" to updatedName,
+            "city" to updatedCity,
+            "age" to updatedAge
+        )
+
+        userRef.updateChildren(updates)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Profil ažuriran", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+                loadUserData()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Greška pri ažuriranju: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun openAddPetDialog(){
@@ -206,8 +288,6 @@ class UserProfileActivity: AppCompatActivity() {
             })
     }
 
-
-
     private fun addPet(view: View) {
         val txtName = view.findViewById<EditText>(R.id.txtName)
         val txtSpecies = view.findViewById<EditText>(R.id.txtSpecies)
@@ -227,7 +307,6 @@ class UserProfileActivity: AppCompatActivity() {
 
         addPetToDatabase(name, species, breed, weight, age, info, ownerId)
     }
-
 
     private fun addPetToDatabase(name: String, species: String, breed: String, weight: String, age: String, info: String, ownerId: String) {
         val pet = Pet(name, species, breed, weight, age, info, ownerId)
@@ -267,29 +346,33 @@ class UserProfileActivity: AppCompatActivity() {
     }
 
     private fun loadUserData() {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        getCurrentUser { user ->
+            if(user != null){
+                txtName.text = user.name
+                txtAboutMe.text = "Age: " + user.age + "\n" + "City: " + user.city
+            }
+        }
+    }
+
+    private fun getCurrentUser(callback: (User?) -> Unit) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: run {
+            callback(null)
+            return
+        }
+
         val userRef = FirebaseDatabase.getInstance().getReference("User").child(uid)
 
-        Log.d("UID_DEBUG", "UID: $uid")
         userRef.get()
             .addOnSuccessListener { snapshot ->
-                if (snapshot.exists()) {
-                    val user = snapshot.getValue(User::class.java)
-                    if (user != null) {
-                        txtName.text = user.name ?: "Nepoznat"
-                        Log.d("USER", "Učitano ime: ${user.name}")
-                    } else {
-                        txtName.text = "Korisnik ne postoji (User null)"
-                        Log.e("USER", "User objekat je null")
-                    }
+                val user = if (snapshot.exists()) {
+                    snapshot.getValue(User::class.java)
                 } else {
-                    txtName.text = "Nema korisnika"
-                    Log.e("USER", "Snapshot ne postoji")
+                    null
                 }
+                callback(user)
             }
             .addOnFailureListener {
-                txtName.text = "Greška pri učitavanju"
-                Log.e("USER", "Greška: ${it.message}")
+                callback(null)
             }
     }
 
