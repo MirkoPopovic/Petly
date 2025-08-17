@@ -162,12 +162,13 @@ class LoginActivity : AppCompatActivity() {
                     else if(sitter && !owner)
                         addUserToDatabase(name, email, "sitter", auth.uid!!, city)
                     else
-                        Toast.makeText(this@LoginActivity, "Error", Toast.LENGTH_SHORT)
+                        Toast.makeText(this@LoginActivity, "Error: Unknown user type", Toast.LENGTH_SHORT)
                     var intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    Toast.makeText(this@LoginActivity, "Error", Toast.LENGTH_SHORT).show()
+                    val errorMessage = task.exception?.message ?: "Unknown error"
+                    Toast.makeText(this@LoginActivity, "Error: $errorMessage", Toast.LENGTH_LONG).show()
                 }
             }
     }
