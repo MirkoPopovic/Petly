@@ -81,17 +81,15 @@
             android:textColor="@color/mainBlue"
             android:layout_below="@+id/txtUserAge"/>
 
-        <EditText
-            android:id="@+id/txtUserCity"
+        <Spinner
+            android:id="@+id/spinnerCity"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/deit_text_backgound"
+            android:layout_height="60dp"
             android:layout_below="@+id/labelCity"
-            android:paddingVertical="5dp"
-            android:paddingHorizontal="10dp"
-            android:fontFamily="@font/poppins_regular"
-            android:textColor="@color/black"
-            android:hint="Weight"/>
+            android:layout_marginRight="10dp"
+            android:background="@drawable/deit_text_backgound"
+            android:paddingLeft="10dp"
+            android:spinnerMode="dropdown"/>
 
 
         <RelativeLayout
@@ -99,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/add_pet_btn_section"
-            android:layout_below="@+id/txtUserCity"
+            android:layout_below="@+id/spinnerCity"
             android:layout_marginTop="10dp"
             android:paddingVertical="5dp">
 

@@ -2,9 +2,12 @@ package com.example.petly
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -23,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnLogin: Button
     private lateinit var txtEmailLogin: EditText
     private lateinit var txtPassworLogin: EditText
+    private lateinit var citySpinner: Spinner
 
     private lateinit var linkLogin: TextView
     private lateinit var btnSingUp: Button
@@ -74,6 +78,7 @@ class LoginActivity : AppCompatActivity() {
         txtEmailSingUp = singUpView.findViewById(R.id.editEmail)
         txtPasswordSingUp = singUpView.findViewById(R.id.editPassword)
         linkBack = singUpView.findViewById(R.id.btnBack)
+        citySpinner = singUpView.findViewById(R.id.spinnerCity)
 
 
         //Role
@@ -124,14 +129,15 @@ class LoginActivity : AppCompatActivity() {
             val name = txtNameSingUp.text.toString()
             val email = txtEmailSingUp.text.toString()
             val password = txtPasswordSingUp.text.toString()
+            val city = citySpinner.selectedItem.toString()
 
             if (name.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
-                signUp(name, email, password)
+                signUp(name, email, password, city)
             } else {
                 Toast.makeText(this@LoginActivity, "Sva polja su obavezna.", Toast.LENGTH_SHORT).show()
             }
         }
-
+        setSpinnerData(singUpView)
     }
 
     private fun login(email: String, password: String){
@@ -147,14 +153,14 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun signUp(name: String, email: String, password: String){
+    private fun signUp(name: String, email: String, password: String, city: String){
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     if(owner && !sitter)
-                        addUserToDatabase(name, email, "owner", auth.uid!!)
+                        addUserToDatabase(name, email, "owner", auth.uid!!, city)
                     else if(sitter && !owner)
-                        addUserToDatabase(name, email, "sitter", auth.uid!!)
+                        addUserToDatabase(name, email, "sitter", auth.uid!!, city)
                     else
                         Toast.makeText(this@LoginActivity, "Error", Toast.LENGTH_SHORT)
                     var intent = Intent(this@LoginActivity, MainActivity::class.java)
@@ -166,8 +172,21 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun addUserToDatabase(name: String, email: String, role: String, uid: String){
+    private fun addUserToDatabase(name: String, email: String, role: String, uid: String, city: String){
         database = Firebase.database.reference
-        database.child("User").child(uid).setValue(User(name, email, role, uid))
+        database.child("User").child(uid).setValue(User(name, email, role, uid, city))
+    }
+
+    private fun setSpinnerData(view: View){
+        val spinner: Spinner = view.findViewById(R.id.spinnerCity)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.serbian_cities,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+
     }
 }

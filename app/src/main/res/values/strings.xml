@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Petly</string>
+    <string-array name="serbian_cities">
+        <item>Beograd</item>
+        <item>Novi Sad</item>
+        <item>Niš</item>
+        <item>Kragujevac</item>
+        <item>Subotica</item>
+        <item>Zrenjanin</item>
+        <item>Pančevo</item>
+        <item>Čačak</item>
+        <item>Kraljevo</item>
+        <item>Novi Pazar</item>
+        <item>Smederevo</item>
+        <item>Leskovac</item>
+        <item>Valjevo</item>
+        <item>Vranje</item>
+        <item>Šabac</item>
+        <item>Pirot</item>
+        <item>Jagodina</item>
+        <item>Požarevac</item>
+        <item>Užice</item>
+    </string-array>
+
 </resources>

@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -40,7 +42,7 @@ class UserProfileActivity: AppCompatActivity() {
     private lateinit var btnSave: RelativeLayout
     private lateinit var txtUserName: TextView
     private lateinit var txtUsrAge: TextView
-    private lateinit var txtUserCity: TextView
+    private lateinit var citySpinner: Spinner
 
     //Firebase
     private lateinit var auth: FirebaseAuth
@@ -61,8 +63,6 @@ class UserProfileActivity: AppCompatActivity() {
 
         //Firebase and database
         auth = FirebaseAuth.getInstance()
-
-
 
         getStuffFromXml()
 
@@ -134,15 +134,25 @@ class UserProfileActivity: AppCompatActivity() {
         var dialogAddView = layoutInflater.inflate(R.layout.edit_profile, null)
 
         btnSave = dialogAddView.findViewById(R.id.btnSaveUser)
-        txtUserCity = dialogAddView.findViewById(R.id.txtUserCity)
+        citySpinner = dialogAddView.findViewById(R.id.spinnerCity)
         txtUserName = dialogAddView.findViewById(R.id.txtUserName)
         txtUsrAge = dialogAddView.findViewById(R.id.txtUserAge)
 
         getCurrentUser { user ->
             if(user != null) {
                 txtUserName.text = user.name
-                txtUserCity.text = user.city
                 txtUsrAge.text = user.age
+
+                val adapter = ArrayAdapter.createFromResource(
+                    this,
+                    R.array.serbian_cities,
+                    android.R.layout.simple_spinner_item
+                )
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                citySpinner.adapter = adapter
+                val initialCity = user.city
+                val position = adapter.getPosition(initialCity)
+                citySpinner.setSelection(position)
             }
         }
 
@@ -159,7 +169,7 @@ class UserProfileActivity: AppCompatActivity() {
         val userRef = FirebaseDatabase.getInstance().getReference("User").child(uid)
 
         val updatedName = txtUserName.text.toString().trim()
-        val updatedCity = txtUserCity.text.toString().trim()
+        val updatedCity = citySpinner.selectedItem.toString()
         val updatedAge = txtUsrAge.text.toString().trim()
 
         val updates = mapOf(
