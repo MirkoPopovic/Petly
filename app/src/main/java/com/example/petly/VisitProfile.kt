@@ -19,6 +19,7 @@ class VisitProfile : AppCompatActivity() {
     private lateinit var petsRecyclerView: RecyclerView
     private lateinit var profileImg: ImageView
     private lateinit var btnBack: RelativeLayout
+    private lateinit var messageBtn: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,7 @@ class VisitProfile : AppCompatActivity() {
         petsRecyclerView = findViewById(R.id.pets)
         profileImg = findViewById(R.id.profileImg)
         btnBack = findViewById(R.id.mainHeader)
+        messageBtn = findViewById(R.id.btnOpenMessage)
 
         val userId = intent.getStringExtra("USER_ID")
         if (userId != null) {
@@ -56,6 +58,15 @@ class VisitProfile : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivity(intent)
             finish()
+        }
+
+        messageBtn.setOnClickListener{
+            val userId = intent.getStringExtra("USER_ID")
+            if (userId != null) {
+                val intent = Intent(this, chatActivity::class.java)
+                intent.putExtra("USER_ID", userId) // prosleđuješ ID korisnika sa profila
+                startActivity(intent)
+            }
         }
     }
 

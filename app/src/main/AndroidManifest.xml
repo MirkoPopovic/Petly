@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Petly"
         tools:targetApi="31">
         <activity
+            android:name=".chatActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".VisitProfile"
             android:exported="false" />
         <activity
