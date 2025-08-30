@@ -39,7 +39,7 @@ class SitterProfileAcitivity : AppCompatActivity() {
     private lateinit var citySpinner: Spinner
 
     private lateinit var auth: FirebaseAuth
-    
+
 
     private lateinit var txtName: TextView
     private lateinit var txtDescription: TextView
