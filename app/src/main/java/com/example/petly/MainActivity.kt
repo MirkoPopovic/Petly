@@ -38,11 +38,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var profileImg: ImageView
     private lateinit var searchBar: EditText
     private lateinit var filterBtn: ImageView
+    private lateinit var btnNotification: ImageView
 
 
     private lateinit var btnApplayFitler: RelativeLayout
     private lateinit var btnCancleFilter: RelativeLayout
     private lateinit var citySpinner: Spinner
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -94,12 +96,18 @@ class MainActivity : AppCompatActivity() {
             openFilterDialog()
         }
 
+        btnNotification.setOnClickListener {
+            val intent = Intent(this, AllChatsActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun getStuffFromXml(){
         profileImg = findViewById(R.id.profileImg)
         searchBar = findViewById(R.id.search)
         filterBtn = findViewById(R.id.filterBtn)
+        btnNotification = findViewById(R.id.btnNotification)
     }
 
     private fun userNotLogedIn(){
