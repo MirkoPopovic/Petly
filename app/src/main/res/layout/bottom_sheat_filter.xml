@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="20dp"
+    android:background="@drawable/bottom_sheat_dialog_background"
+    android:paddingBottom="20dp">
+
+
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fitler"
+        android:textColor="@color/containerBlue"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/addSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header">
+
+        <Spinner
+            android:id="@+id/spinnerCity"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/text_background"
+            android:paddingLeft="10dp"
+            android:spinnerMode="dropdown"
+            />
+
+        <RelativeLayout
+            android:id="@+id/btnApplayFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/add_pet_btn_section"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="5dp"
+            android:layout_below="@+id/spinnerCity">
+
+            <Button
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/singup_button_backgound"
+                android:text="Filter"
+                android:textAllCaps="false"
+                android:textColor="@color/white"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnCancleFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_background"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="5dp"
+            android:layout_below="@+id/btnApplayFilter">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="Cancle"
+                android:textAllCaps="false"
+                android:textColor="#10377a"
+                android:background="@android:color/transparent"
+                android:elevation="4dp"
+                android:translationZ="4dp"
+                android:padding="8dp"
+                android:textSize="20dp"/>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</RelativeLayout>

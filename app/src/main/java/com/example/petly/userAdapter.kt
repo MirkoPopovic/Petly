@@ -27,7 +27,7 @@ class UserAdapter(
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = users[position]
         holder.name.text = user.name
-        holder.city.text = user.city // ovde se prikazuje grad
+        holder.city.text = user.city
 
         holder.root.setOnClickListener {
             onItemClick(user)

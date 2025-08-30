@@ -4,10 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import android.window.SplashScreen
@@ -17,6 +20,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -35,6 +39,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchBar: EditText
     private lateinit var filterBtn: ImageView
 
+
+    private lateinit var btnApplayFitler: RelativeLayout
+    private lateinit var btnCancleFilter: RelativeLayout
+    private lateinit var citySpinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -78,8 +86,12 @@ class MainActivity : AppCompatActivity() {
 
         getCurrentUser { user ->
             if(user != null){
-                loadAllUsers(user)
+                loadUsers(user, null)
             }
+        }
+
+        filterBtn.setOnClickListener{
+            openFilterDialog()
         }
 
     }
@@ -96,9 +108,8 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loadAllUsers(user: User) {
+    private fun loadUsers(user: User, city: String? = null) {
         val database = FirebaseDatabase.getInstance().getReference("User")
-
         val targetRole = if (user.role == "owner") "sitter" else "owner"
 
         database.orderByChild("role").equalTo(targetRole)
@@ -108,16 +119,18 @@ class MainActivity : AppCompatActivity() {
                 for (child in snapshot.children) {
                     val u = child.getValue(User::class.java)
                     if (u != null) {
-                        userList.add(u)
+                        if (city == null || u.city.equals(city, ignoreCase = true)) {
+                            userList.add(u)
+                        }
                     }
                 }
-
                 showUsers(userList)
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Failed: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
+
 
     private fun showUsers(users: List<User>) {
         val recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.users)
@@ -129,8 +142,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-
 
     private fun getCurrentUser(callback: (User?) -> Unit) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: run {
@@ -154,5 +165,50 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    private fun openFilterDialog(){
+        val dialog = BottomSheetDialog(this)
+        var dialogAddView = layoutInflater.inflate(R.layout.bottom_sheat_filter, null)
+
+        btnApplayFitler = dialogAddView.findViewById(R.id.btnApplayFilter)
+        btnCancleFilter = dialogAddView.findViewById(R.id.btnCancleFilter)
+        citySpinner = dialogAddView.findViewById(R.id.spinnerCity)
+
+        setSpinnerData(dialogAddView)
+
+        btnApplayFitler.setOnClickListener {
+            val selectedCity = citySpinner.selectedItem.toString()
+            getCurrentUser { user ->
+                if(user != null){
+                    loadUsers(user, selectedCity)
+                }
+            }
+            dialog.dismiss()
+        }
+
+        btnCancleFilter.setOnClickListener {
+            getCurrentUser { user ->
+                if(user != null){
+                    loadUsers(user, null)
+                }
+            }
+            dialog.dismiss()
+        }
+
+        dialog.setContentView(dialogAddView)
+        dialog.show()
+    }
+
+    private fun setSpinnerData(view: View){
+        val spinner: Spinner = view.findViewById(R.id.spinnerCity)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.serbian_cities,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+
+    }
 
 }

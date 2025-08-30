@@ -1,10 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VisitProfile">
+    android:fitsSystemWindows="true"
+    tools:context=".UserProfileActivity"
+    android:background="@color/lightGray">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/mainHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/arrofIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/arrow"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User Profile"
+            android:textColor="@color/roelBtn1"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="28dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/arrofIcon"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/track"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="-20dp"
+        android:layout_marginTop="-20dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/profile_background"
+        android:layout_below="@+id/mainHeader"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="30dp"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/profileImg"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/user_profile"/>
+
+
+
+        <RelativeLayout
+            android:id="@+id/aboutSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileImg"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/roelBtn1"
+                android:textSize="28dp"/>
+
+
+            <ImageView
+                android:id="@+id/line"
+                android:layout_width="400dp"
+                android:layout_height="250dp"
+                android:src="@drawable/line_decor"
+                android:layout_marginTop="-80dp"
+                android:layout_marginLeft="-90dp"/>
+
+            <TextView
+                android:id="@+id/aboutMeH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtName"
+                android:text="About Me"
+                android:textColor="@color/containerBlue"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="20dp"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:id="@+id/txtAboutMe"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="@drawable/text_background"
+                android:layout_below="@+id/aboutMeH"
+                android:text=""
+                android:textSize="18dp"
+                android:padding="15dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/myPetsSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/aboutSection">
+
+            <TextView
+                android:id="@+id/myPetsH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Pets"
+                android:textColor="@color/containerBlue"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="22dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pets"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/myPetsH"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btnOpenMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_background"
+            android:layout_below="@+id/myPetsSection"
+            android:layout_marginTop="20dp"
+            android:paddingVertical="5dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="Message"
+                android:textAllCaps="false"
+                android:textColor="#10377a"
+                android:background="@android:color/transparent"
+                android:elevation="4dp"
+                android:translationZ="4dp"
+                android:padding="8dp"
+                android:textSize="20dp"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
